@@ -7,18 +7,18 @@
         <div class="row">
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-primary text-white mb-4">
-                    <div class="card-body">Item Masuk</div>
+                    <div class="card-body">Item Masuk <h2>{{ $item_masuk }}</h2></div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <a class="small text-white stretched-link" href="{{ url('/in') }}">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-warning text-white mb-4">
-                    <div class="card-body">Item Keluar</div>
+                    <div class="card-body">Item Keluar <h2>{{ $item_keluar }}</h2></div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <a class="small text-white stretched-link" href="{{ url('/out') }}">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                 </div>
             </div>
         </div>
-        <div class="card mb-4">
+        {{-- <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 DataTable Example
@@ -93,6 +93,6 @@
 
                 </table>
             </div>
-        </div>
+        </div> --}}
     </div>
 </main>
