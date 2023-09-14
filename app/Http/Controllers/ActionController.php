@@ -71,11 +71,17 @@ class ActionController extends Controller
                 if($in->save())
                     return response(['status' => 'success', 'message' => 'Kode item masuk berhasil terinput']);
             }else{
-                $out = new Out;
-                $out->kode_item = $kode;
-                $out->user_out = auth()->user()->id;
-                if($out->save())
-                    return response(['status' => 'success', 'message' => 'Kode item keluar berhasil terinput']);
+                //Check
+                $checkIn = In::where('kode_item',$kode)->count();
+                if($checkIn){
+                    $out = new Out;
+                    $out->kode_item = $kode;
+                    $out->user_out = auth()->user()->id;
+                    if($out->save())
+                        return response(['status' => 'success', 'message' => 'Kode item keluar berhasil terinput']);
+                }else{
+                   return response(['status' => 'error', 'message' => 'Kode item tidak ditemukan di Item masuk!']);
+                }
             }
             return response(['status' => 'error', 'message' => 'Terjadi kesalahan kode tidak terinput!']);
         }else{

@@ -122,7 +122,7 @@
                         $('#kode_item').val('').focus();
                         table.ajax.reload(null,false);
                     }else{
-                        alert(e.messge);
+                        alert(e.message);
                         $('#kode_item').val('').focus();
                     }
                 }
