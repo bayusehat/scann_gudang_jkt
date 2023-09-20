@@ -63,7 +63,7 @@ class ActionController extends Controller
 
     public function auto_add(Request $request){
         $kode = $request->input('kode_item');
-        if(strlen($kode) == 10){
+        if(strlen($kode) == 14){
             if($request->part == 'in'){
                 $in = new In;
                 $in->kode_item = $kode;
