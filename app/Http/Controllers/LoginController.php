@@ -43,7 +43,7 @@ class LoginController extends Controller
     public function createUser(){
         $user = new User;
         $user->name = 'Admin';
-        $user->email = 'admin@jackson.com';
+        $user->email = 'admin@jackson-corner.fun';
         $user->password = Hash::make('admin123#');
         $user->save();
     }

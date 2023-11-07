@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\In;
 use App\Models\Out;
+use App\Models\ItemSold;
 
 
 class User extends Authenticatable
@@ -59,5 +60,9 @@ class User extends Authenticatable
     public function out()
     {
         return $this->hasMany(Out::class, 'user_out', 'id');
+    }
+
+    public function item_sold(){
+        return $this->belongsTo(ItemSold::class,'user_id','id');
     }
 }

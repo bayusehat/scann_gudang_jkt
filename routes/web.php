@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ActionController;
+use App\Http\Controllers\ItemController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,4 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/in/load',[ActionController::class,'loadIn']);
     Route::get('/out/load',[ActionController::class,'loadOut']);
     Route::post('/autoadd',[ActionController::class,'auto_add']);
+
+    Route::post('/item/add',[ItemController::class,'auto_add']);
+    Route::get('/item/load',[ItemController::class,'loadItem']);
 });
