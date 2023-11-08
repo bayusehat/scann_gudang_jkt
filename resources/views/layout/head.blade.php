@@ -24,6 +24,13 @@
         <script src="{{ asset('js/dataTables.fixedHeader.min.js') }}"></script>
         <script src="{{ asset('js/dataTables.responsive.min.js') }}"></script>
         <script src="{{ asset('js/responsive.bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/dataTables.buttons.min.js')}}"></script>
+        <link rel="stylesheet" href="{{ asset('css/buttons.dataTables.min.css') }}">
+        <script src="{{ asset('js/jszip.min.js')}}"></script>
+        <script src="{{ asset('js/pdfmake.min.js')}}"></script>
+        <script src="{{ asset('js/vfs_fonts.js')}}"></script>
+        <script src="{{ asset('js/buttons.html5.min.js')}}"></script>
+        <script src="{{ asset('js/buttons.print.min.js')}}"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">

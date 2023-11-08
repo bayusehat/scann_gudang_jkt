@@ -62,6 +62,10 @@
 
     })
     var table = new DataTable('#tableIn',{
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
             processing: true,
             serverSide: true,
             destroy: true,
