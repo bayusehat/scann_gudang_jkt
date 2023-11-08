@@ -16,7 +16,10 @@ use App\Http\Controllers\ItemController;
 |
 */
 
-Route::get('/',[LoginController::class,'index'])->name('login');
+Route::middleware(['isLogin'])->group(function () {
+    Route::get('/',[LoginController::class,'index'])->name('login');
+});
+
 Route::post('/dologin',[LoginController::class,'actionLogin']);
 Route::get('/dologout',[LoginController::class,'actionLogout']);
 Route::get('/create',[LoginController::class,'createUser']);
@@ -34,4 +37,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/item/load',[ItemController::class,'loadItem']);
     Route::get('/item/scan',[ItemController::class,'item_scan']);
     Route::get('/item/sold/load',[ItemController::class,'loadSoldItem']);
+
+    Route::post('item/insert',[ItemController::class, 'insert']);
+    Route::get('item/edit/{id}',[ItemController::class, 'edit']);
+    Route::post('item/update/{id}',[ItemController::class,'update']);
+    Route::get('item/delete/{id}',[ItemController::class,'destroy']);
 });

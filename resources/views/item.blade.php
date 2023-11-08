@@ -4,19 +4,67 @@
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Item Master</li>
         </ol>
-        {{-- <div class="row">
+        <div class="row">
             <div class="col-xl-12">
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
-                        Scan / Input Item
+                        Insert new Item
                     </div>
-                    <div class="form-group">
-                        <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Scan or write item code here ..." onkeyup="auto_add(event)" autofocus>
+                    <div class="card-body">
+                        <form class="form-inline">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Code Item / Barcode</label>
+                                        <input type="text" class="form-control" name="barcode" id="barcode" placeholder="Barcode Item">
+                                        <span class="text-danger" id="valid_barcode"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Artikel</label>
+                                        <input type="text" class="form-control" name="artikel" id="artikel" placeholder="Artikel Name">
+                                        <span class="text-danger" id="valid_artikel"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Warna</label>
+                                        <select name="warna" id="warna" class="form-control">
+                                            <option value="">Pilih Warna</option>
+                                        </select>
+                                        <span class="text-danger" id="valid_warna"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Size</label>
+                                        <select name="size" id="size" class="form-control">
+                                            <option value="">Pilih Size</option>
+                                        </select>
+                                        <span class="text-danger" id="valid_size"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Harga</label>
+                                        <input type="text" class="form-control" name="harga" id="harga" placeholder="harga">
+                                        <span class="text-danger" id="valid_harga"></span>
+                                    </div>
+                                    <br>
+                                    <button type="button" class="btn btn-primary btn-block" name="btncreate" id="btncreate" onclick="createItem()"><i class="fas fa-save"></i> Create</button>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <button type="button" class="btn btn-success btn-block" name="btnuodate" id="btnupdate" onclick="updateItem()"><i class="fas fa-edit"></i> Update</button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button type="button" class="btn btn-danger btn-block" name="btncancel" id="btncancel" onclick="whenCancel()"><i class="fas fa-times"></i> Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
@@ -55,8 +103,134 @@
 </main>
 <script>
     $(document).ready(function(){
-
+        $("#btnupdate").hide();
+        $("#btncancel").hide();
     })
+
+    function whenEdit(){
+        $("#btncreate").hide();
+        $("#btnupdate").show();
+        $("#btncancel").show();
+        $("#barcode").focus();
+    }
+
+    function whenCancel(){
+        $("#btncreate").show();
+        $("#btnupdate").hide();
+        $("#btncancel").hide();
+        $("#barcode").val(""),
+        $("#artikel").val(""),
+        $("#warna").val(""),
+        $("#size").val(""),
+        $("#harga").val("")
+    }
+
+    function createItem(){
+        $.ajax({
+            url : "{{ url('item/insert') }}",
+            method : "POST",
+            dataType : "JSON",
+            data : {
+                'barcode' : $("#barcode").val(),
+                'artikel' : $("#artikel").val(),
+                'warna' : $("#warna").val(),
+                'size' : $("#size").val(),
+                'harga' : $("#harga").val()
+            },
+            headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success:function(e){
+                if(e.status == 200){
+                    $("#barcode").val("").focus(),
+                    $("#artikel").val(""),
+                    $("#warna").val(""),
+                    $("#size").val(""),
+                    $("#harga").val("")
+                    table.ajax.reload(null,false);
+                }else if(e.status == 400){
+                    $.each(e.errors,function(i,a){
+                        $("#valid_"+i).text(a)
+                    })
+                    $("#btnRefresh").show();
+                }else{
+                    alert(e.message);
+                }
+            }
+        })
+    }
+
+    function editItem(id){
+        whenEdit();
+        $.ajax({
+            url : "{{ url('item/edit') }}/"+id,
+            method : "GET",
+            dataType : "JSON",
+            success:function(e){
+                if(e.status == 200){
+                    $("#barcode").val(e.data.barcode)
+                    $("#artikel").val(e.data.artikel)
+                    $("#warna").val(e.data.warna).trigger('change')
+                    $("#size").val(e.data.size).trigger('change')
+                    $("#harga").val(e.data.harga)
+                    $("#btnupdate").attr('onclick',`updateItem(${e.data.id_item})`);
+                }else{
+                    alert(e.message);
+                }
+            }
+        })
+    }
+
+    function updateItem(id){
+        $.ajax({
+            url : "{{ url('item/update') }}/"+id,
+            method : "POST",
+            dataType : "JSON",
+            data : {
+                'barcode' : $("#barcode").val(),
+                'artikel' : $("#artikel").val(),
+                'warna' : $("#warna").val(),
+                'size' : $("#size").val(),
+                'harga' : $("#harga").val()
+            },
+            headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success:function(e){
+                if(e.status == 200){
+                    $("#barcode").val(""),
+                    $("#artikel").val(""),
+                    $("#warna").val(""),
+                    $("#size").val(""),
+                    $("#harga").val("")
+                    table.ajax.reload(null,false);
+                }else if(e.status == 400){
+                    $.each(e.errors,function(i,a){
+                        $("#valid_"+i).text(a)
+                    })
+                    $("#btnRefresh").show();
+                }else{
+                    alert(e.message);
+                }
+            }
+        })
+    }
+
+    function deleteItem(id){
+        $.ajax({
+            url : "{{ url('item/delete') }}/"+id,
+            method : "GET",
+            dataType: "JSON",
+            success:function(e){
+                if(e.status == 200){
+                    table.ajax.reload(null,false);
+                }else{
+                    alert(e.message);
+                }
+            }
+        })
+    }
+
     var table = new DataTable('#tableIn',{
             processing: true,
             serverSide: true,

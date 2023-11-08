@@ -16,8 +16,8 @@ class Logged
     public function handle(Request $request, Closure $next): Response
     {
         if(!auth()->check()){
-            return redirect('/');
+            return $next($request);
         }
-        return $next($request);
+        return redirect('/');
     }
 }

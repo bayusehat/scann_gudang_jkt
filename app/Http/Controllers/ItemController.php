@@ -38,12 +38,88 @@ class ItemController extends Controller
                 ->addColumn('action', function($row){
                     return '
                     <div class="btn-group" role="group" aria-label="Basic example">
+                        <a href="javascript:void(0)" onclick="editItem('.$row->id_item.')" class="btn btn-primary"><i class="fas fa-edit"></i></a>
                         <a href="javascript:void(0)" onclick="deleteItem('.$row->id_item.')" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                     </div>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
+    }
+
+    public function insert(Request $request){
+        $rules = [
+            'barcode' => 'required',
+            'ariktel' => 'required',
+            'warna' => 'required',
+            'size' => 'required',
+        ];
+
+        $isValid = Validator::make($request->all(),$rules);
+
+        if($isValid->fails()){
+            return response(['status' => 400, 'errors' => $isValid->errors()]);
+        }else{
+            $i = new Item;
+            $i->barcode = $request->input('barcode');
+            $i->artikel = $request->input('artikel');
+            $i->warna = $request->input('warna');
+            $i->size = $request->input('size');
+            $i->harga = $request->input('harga');
+            if($i->save()){
+                return response(['status' => 200, 'message' => 'Item created successfully']);
+            }else{
+                return response(['status' => 500, 'message' => 'Caught an Error, cannot create new item']);
+            }
+        }
+    }
+
+    public function edit($id_item){
+        $check = Item::find($id_item);
+        if($check){
+            return response(['status' => 200, 'data' => $check]);
+        }
+
+        return response(['status' => 500,'message' => 'Data not found']);
+    }
+
+    public function update(Request $request, $id_item){
+        $i = Item::find($id_item);
+        if($i)
+            return response(['status' => 500, 'message' => 'Data not found']);
+
+        $rules = [
+            'barcode' => 'required',
+            'ariktel' => 'required',
+            'warna' => 'required',
+            'size' => 'required',
+        ];
+
+        $isValid = Validator::make($request->all(),$rules);
+
+        if($isValid->fails()){
+            return response(['status' => 400, 'errors' => $isValid->errors()]);
+        }else{
+            $i->barcode = $request->input('barcode');
+            $i->artikel = $request->input('artikel');
+            $i->warna = $request->input('warna');
+            $i->size = $request->input('size');
+            $i->harga = $request->input('harga');
+            if($i->save()){
+                return response(['status' => 200, 'message' => 'Item updated successfully']);
+            }else{
+                return response(['status' => 500, 'message' => 'Caught an Error, cannot update new item']);
+            }
+        }
+    }
+
+    public function destroy($id_item){
+        $item = Item::find($id_item);
+        if($item){
+            return response(['status' => 200, 'message' => 'Item deleted successfully']);
+        }
+
+        return response(['status' => 500, 'message' => 'Error! cannot delete item']);
     }
 
     public function auto_add(Request $request){
