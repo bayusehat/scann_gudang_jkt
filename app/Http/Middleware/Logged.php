@@ -18,6 +18,6 @@ class Logged
         if(!auth()->check()){
             return $next($request);
         }
-        return redirect('/');
+        return redirect('/home');
     }
 }

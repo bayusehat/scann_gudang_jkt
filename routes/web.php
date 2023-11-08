@@ -15,11 +15,7 @@ use App\Http\Controllers\ItemController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::middleware(['isLogin'])->group(function () {
-    Route::get('/',[LoginController::class,'index'])->name('login');
-});
-
+Route::get('/',[LoginController::class,'index'])->name('login');
 Route::post('/dologin',[LoginController::class,'actionLogin']);
 Route::get('/dologout',[LoginController::class,'actionLogout']);
 Route::get('/create',[LoginController::class,'createUser']);
