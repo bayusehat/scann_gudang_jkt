@@ -35,6 +35,7 @@
                             <th>Size</th>
                             <th>Harga</th>
                             <th>Scan Date</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -46,6 +47,7 @@
                             <th>Size</th>
                             <th>Harga</th>
                             <th>Scan Date</th>
+                            <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -75,7 +77,7 @@
                 { name: 'size', data: 'size'},
                 { name: 'harga', data: 'harga'},
                 { name: 'created_at', data: 'created_at'},
-                // { name: 'action', data: 'action'},
+                { name: 'action', data: 'action'}
             ],
             lengthMenu: [10,50,-1],
             order: [[0, 'desc']],
@@ -112,5 +114,20 @@
             })
         }, 500);
 
+    }
+
+    function deleteItemSold(id){
+        $.ajax({
+            url : "{{ url('item/delete') }}/"+id+"/sold",
+            method : "GET",
+            dataType : "JSON",
+            success:function(e){
+                if(e.status == 200){
+                    table.ajax.reload(null,false);
+                }else{
+                    alert(e.message);
+                }
+            }
+        })
     }
 </script>

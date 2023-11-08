@@ -176,8 +176,27 @@ class ItemController extends Controller
                 ->addColumn('created_at', function($row){
                     return date('d-m-Y H:i',strtotime($row->created_at));
                 })
+                ->addColumn('action',function($row){
+                    return '<div class="btn-group" role="group" aria-label="Basic example">
+                            <a href="javascript:void(0)" onclick="deleteItemSold('.$row->id_item_sold.')" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                        </div>';
+                })
+                ->rawColumns(['action'])
                 ->make(true);
         }
+    }
+
+    public function destroyItemScan($id_item){
+        $dis = ItemSold::find($id_item);
+        if(!$dis){
+            return response(['status' => 500, 'message' => 'Data not found']);
+        }
+
+        if($dis->delete()){
+            return response(['status' => 200, 'message' => 'Item Sold deleted successfully']);
+        }
+
+        return response(['status' => 500, 'message' => 'Error! cannot delete Item Sold']);
     }
 
 }

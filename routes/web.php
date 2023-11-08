@@ -42,4 +42,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('item/edit/{id}',[ItemController::class, 'edit']);
     Route::post('item/update/{id}',[ItemController::class,'update']);
     Route::get('item/delete/{id}',[ItemController::class,'destroy']);
+
+    Route::get('item/delete/{id}/sold',[ItemController::class, 'destroyItemScan']);
 });
