@@ -28,6 +28,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/out/load',[ActionController::class,'loadOut']);
     Route::post('/autoadd',[ActionController::class,'auto_add']);
 
+
+    Route::get('/item',[ItemController::class,'index']);
     Route::post('/item/add',[ItemController::class,'auto_add']);
     Route::get('/item/load',[ItemController::class,'loadItem']);
+    Route::get('/item/scan',[ItemController::class,'item_scan']);
+    Route::get('/item/sold/load',[ItemController::class,'loadSoldItem']);
 });

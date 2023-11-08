@@ -1,8 +1,8 @@
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Item Masuk</h1>
+        <h1 class="mt-4">Item Master</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Item Masuk</li>
+            <li class="breadcrumb-item active">Item Master</li>
         </ol>
         {{-- <div class="row">
             <div class="col-xl-12">
@@ -23,27 +23,27 @@
                 Item
             </div>
             <div class="card-body">
-                <table id="tableIn">
+                <table id="tableIn" class="table table-responsive compact">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Kode Item</th>
-                            <th>Tanggal Masuk</th>
-                            <th>User</th>
-                            {{-- <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th> --}}
+                            <th>Barcode</th>
+                            <th>Artikel</th>
+                            <th>Warna</th>
+                            <th>Size</th>
+                            <th>Harga</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>No</th>
-                            <th>Kode Item</th>
-                            <th>Tanggal Masuk</th>
-                            <th>User</th>
-                            {{-- <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th> --}}
+                            <th>Barcode</th>
+                            <th>Artikel</th>
+                            <th>Warna</th>
+                            <th>Size</th>
+                            <th>Harga</th>
+                            <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -63,13 +63,16 @@
             destroy: true,
             paging: true,
             ajax: {
-                url: '{{ url("in/load") }}'
+                url: '{{ url("item/load") }}'
             },
             columns: [
                 { name: 'DT_RowIndex', data: 'DT_RowIndex', orderable: false, searchable: false },
-                { name: 'kode_item', data: 'kode_item'},
-                { name: 'created_at', data: 'created_at'},
-                { name: 'user_in', data: 'user_in'},
+                { name: 'barcode', data: 'barcode'},
+                { name: 'artikel', data: 'artikel'},
+                { name: 'warna', data: 'warna'},
+                { name: 'size', data: 'size'},
+                { name: 'harga', data: 'harga'},
+                { name: 'action', data: 'action'},
             ],
             lengthMenu: [10,50,-1],
             order: [[0, 'desc']],
@@ -97,37 +100,37 @@
         //         }
         //     })
         // })
-    let timer = null;
-    function auto_add(e){
-        var kode = $("#kode_item").val();
-        e.preventDefault();
-        if(timer){
-            window.clearTimeout(timer);
-            timer = null;
-        }
+    // let timer = null;
+    // function auto_add(e){
+    //     var kode = $("#kode_item").val();
+    //     e.preventDefault();
+    //     if(timer){
+    //         window.clearTimeout(timer);
+    //         timer = null;
+    //     }
 
-        timer = window.setTimeout( ()=>{
-            $.ajax({
-                method : 'POST',
-                url : '{{ url("/autoadd") }}/',
-                data : {
-                    'kode_item' : kode,
-                    'part' : 'in'
-                },
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success:function(e){
-                    if(e.status == 'success'){
-                        $('#kode_item').val('').focus();
-                        table.ajax.reload(null,false);
-                    }else{
-                        alert(e.message);
-                        $('#kode_item').val('').focus();
-                    }
-                }
-            })
-        }, 500);
+    //     timer = window.setTimeout( ()=>{
+    //         $.ajax({
+    //             method : 'POST',
+    //             url : '{{ url("/autoadd") }}/',
+    //             data : {
+    //                 'kode_item' : kode,
+    //                 'part' : 'in'
+    //             },
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             },
+    //             success:function(e){
+    //                 if(e.status == 'success'){
+    //                     $('#kode_item').val('').focus();
+    //                     table.ajax.reload(null,false);
+    //                 }else{
+    //                     alert(e.message);
+    //                     $('#kode_item').val('').focus();
+    //                 }
+    //             }
+    //         })
+    //     }, 500);
 
-    }
+    // }
 </script>
