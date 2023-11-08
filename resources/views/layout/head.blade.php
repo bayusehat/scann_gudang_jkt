@@ -9,21 +9,21 @@
         <meta name="author" content="STS" />
         <title>{{ $data['title'] }}</title>
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
-        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script src="{{asset('js/jquery-3.5.1.js')}}"></script>
+        <script src="{{asset('js/fontawesome.min.js')}}"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="{{asset('js/bootstrap.bundle.min.js')}}" crossorigin="anonymous"></script>
         <script src="{{ asset('js/scripts.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="{{ asset('assets/demo/chart-area-demo.js') }}"></script>
         <script src="{{ asset('assets/demo/chart-bar-demo.js') }}"></script>
-        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap.min.css">
-        <script src="https://cdn.datatables.net/fixedheader/3.3.2/js/dataTables.fixedHeader.min.js"></script>
-        <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-        <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap.min.js"></script>
+        <script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+        <link rel="stylesheet" href="{{ asset('css/jquery.dataTables.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/fixedHeader.bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/responsive.bootstrap.min.css') }}">
+        <script src="{{ asset('js/dataTables.fixedHeader.min.js') }}"></script>
+        <script src="{{ asset('js/dataTables.responsive.min.js') }}"></script>
+        <script src="{{ asset('js/responsive.bootstrap.min.js') }}"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
