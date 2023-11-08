@@ -15,7 +15,9 @@ class ItemController extends Controller
         $data = [
             'title' => 'Item Master',
             'content' => 'item',
-            'active' => true
+            'active' => true,
+            'warna' => ['BLACK','WHITE','COFFEE','TANE','BEIGE','DARK GREY','BLUE','RED','TOSCA','BLUE ORANGE'],
+            'size' => ['39','40','41', '42','43','44','25']
         ];
 
         return view('layout.index',['data' => $data]);
@@ -50,7 +52,7 @@ class ItemController extends Controller
     public function insert(Request $request){
         $rules = [
             'barcode' => 'required',
-            'ariktel' => 'required',
+            'artikel' => 'required',
             'warna' => 'required',
             'size' => 'required',
         ];
@@ -85,12 +87,13 @@ class ItemController extends Controller
 
     public function update(Request $request, $id_item){
         $i = Item::find($id_item);
-        if($i)
+        if(!$i){
             return response(['status' => 500, 'message' => 'Data not found']);
-
+        }
+        
         $rules = [
             'barcode' => 'required',
-            'ariktel' => 'required',
+            'artikel' => 'required',
             'warna' => 'required',
             'size' => 'required',
         ];
@@ -115,7 +118,7 @@ class ItemController extends Controller
 
     public function destroy($id_item){
         $item = Item::find($id_item);
-        if($item){
+        if($item->delete()){
             return response(['status' => 200, 'message' => 'Item deleted successfully']);
         }
 

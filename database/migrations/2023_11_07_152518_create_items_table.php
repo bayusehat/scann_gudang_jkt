@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('artikel');
             $table->string('warna');
             $table->string('size');
-            $table->float('harga')->default(0);
+            $table->bigInteger('harga')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

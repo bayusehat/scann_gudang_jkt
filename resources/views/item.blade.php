@@ -1,3 +1,8 @@
+<style>
+    .b-block {
+        width: 100%;
+    }
+</style>
 <main>
     <div class="container-fluid px-4">
         <h1 class="mt-4">Item Master</h1>
@@ -9,7 +14,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
-                        Insert new Item
+                        <span id="titlefunction">Insert new Item</span>
                     </div>
                     <div class="card-body">
                         <form class="form-inline">
@@ -18,12 +23,12 @@
                                     <div class="form-group">
                                         <label>Code Item / Barcode</label>
                                         <input type="text" class="form-control" name="barcode" id="barcode" placeholder="Barcode Item">
-                                        <span class="text-danger" id="valid_barcode"></span>
+                                        <span class="text-danger vld" id="valid_barcode"></span>
                                     </div>
                                     <div class="form-group">
                                         <label>Artikel</label>
                                         <input type="text" class="form-control" name="artikel" id="artikel" placeholder="Artikel Name">
-                                        <span class="text-danger" id="valid_artikel"></span>
+                                        <span class="text-danger vld" id="valid_artikel"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -31,31 +36,37 @@
                                         <label>Warna</label>
                                         <select name="warna" id="warna" class="form-control">
                                             <option value="">Pilih Warna</option>
+                                            @foreach ($warna as $w)
+                                                <option value="{{$w}}">{{$w}}</option>
+                                            @endforeach
                                         </select>
-                                        <span class="text-danger" id="valid_warna"></span>
+                                        <span class="text-danger vld" id="valid_warna"></span>
                                     </div>
                                     <div class="form-group">
                                         <label>Size</label>
                                         <select name="size" id="size" class="form-control">
                                             <option value="">Pilih Size</option>
+                                            @foreach ($size as $s)
+                                                <option value="{{$s}}">{{$s}}</option>
+                                            @endforeach
                                         </select>
-                                        <span class="text-danger" id="valid_size"></span>
+                                        <span class="text-danger vld" id="valid_size"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Harga</label>
-                                        <input type="text" class="form-control" name="harga" id="harga" placeholder="harga">
-                                        <span class="text-danger" id="valid_harga"></span>
+                                        <input type="text" class="form-control" name="harga" id="harga" placeholder="Harga">
+                                        <span class="text-danger vld" id="valid_harga"></span>
                                     </div>
                                     <br>
-                                    <button type="button" class="btn btn-primary btn-block" name="btncreate" id="btncreate" onclick="createItem()"><i class="fas fa-save"></i> Create</button>
+                                    <button type="button" class="btn btn-primary b-block" name="btncreate" id="btncreate" onclick="createItem()"><i class="fas fa-save"></i> Create</button>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <button type="button" class="btn btn-success btn-block" name="btnuodate" id="btnupdate" onclick="updateItem()"><i class="fas fa-edit"></i> Update</button>
+                                            <button type="button" class="btn btn-success b-block" name="btnuodate" id="btnupdate" onclick="updateItem()"><i class="fas fa-edit"></i> Update</button>
                                         </div>
                                         <div class="col-md-6">
-                                            <button type="button" class="btn btn-danger btn-block" name="btncancel" id="btncancel" onclick="whenCancel()"><i class="fas fa-times"></i> Cancel</button>
+                                            <button type="button" class="btn btn-danger b-block" name="btncancel" id="btncancel" onclick="whenCancel()"><i class="fas fa-times"></i> Cancel</button>
                                         </div>
                                     </div>
                                 </div>
@@ -122,7 +133,8 @@
         $("#artikel").val(""),
         $("#warna").val(""),
         $("#size").val(""),
-        $("#harga").val("")
+        $("#harga").val("");
+        $("#titlefunction").text("Insert new Item");
     }
 
     function createItem(){
@@ -147,6 +159,7 @@
                     $("#warna").val(""),
                     $("#size").val(""),
                     $("#harga").val("")
+                    $(".vld").text("");
                     table.ajax.reload(null,false);
                 }else if(e.status == 400){
                     $.each(e.errors,function(i,a){
@@ -168,6 +181,7 @@
             dataType : "JSON",
             success:function(e){
                 if(e.status == 200){
+                    $("#titlefunction").text("Edit Item "+e.data.artikel);
                     $("#barcode").val(e.data.barcode)
                     $("#artikel").val(e.data.artikel)
                     $("#warna").val(e.data.warna).trigger('change')
@@ -203,6 +217,7 @@
                     $("#warna").val(""),
                     $("#size").val(""),
                     $("#harga").val("")
+                    whenCancel();
                     table.ajax.reload(null,false);
                 }else if(e.status == 400){
                     $.each(e.errors,function(i,a){
