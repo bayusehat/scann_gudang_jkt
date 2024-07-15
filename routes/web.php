@@ -40,4 +40,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('item/delete/{id}',[ItemController::class,'destroy']);
 
     Route::get('item/delete/{id}/sold',[ItemController::class, 'destroyItemScan']);
+    Route::post('item/import',[ItemController::class,'importItem']);
 });

@@ -13,6 +13,7 @@ class In extends Model
 
     protected $table = 'ins';
     protected $primaryKey = 'id_in';
+    protected $guarded = [];
     protected $hidden = ['created_at','deleted_at'];
 
     public $timestamps = true;

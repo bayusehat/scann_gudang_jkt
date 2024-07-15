@@ -13,6 +13,7 @@ class Item extends Model
 
     protected $table = 'items';
     protected $primaryKey = 'id_item';
+    protected $guarded = [];
     public $timestamp = true;
 
     public function item_sold(){

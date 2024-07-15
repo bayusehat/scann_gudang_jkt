@@ -8,6 +8,9 @@ use App\Models\ItemSold;
 use Validator;
 use Str;
 use DataTables;
+use App\Imports\ItemImport;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ItemController extends Controller
 {
@@ -197,6 +200,34 @@ class ItemController extends Controller
         }
 
         return response(['status' => 500, 'message' => 'Error! cannot delete Item Sold']);
+    }
+
+    public function importItem(Request $request){
+        $rules = [
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ];
+
+        $isValid = Validator::make($request->all(),$rules);
+        if($isValid->fails())
+            return redirect()->back()->withErrors($isValid->errors());
+
+            $file = $request->file('file');
+            $nama_file = $file->hashName();
+            $path = $file->storeAs('public/excel/',$nama_file);
+            $import = Excel::import(new ItemImport($request->get('flag')), storage_path('app/public/excel/'.$nama_file));
+            Storage::delete($path);
+    
+            if($import) {
+                return response([
+                    'status' => 200,
+                    'message' => 'Data berhasil diimport!'
+                ]);
+            } else {
+                return response([
+                    'status' => 400,
+                    'message' => 'Data gagal diimport! silahkan coba lagi'
+                ]);
+            }
     }
 
 }

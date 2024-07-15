@@ -12,6 +12,7 @@ class Out extends Model
 
     protected $table = 'outs';
     protected $primaryKey = 'id_out';
+    protected $guarded = [];
     protected $hidden = ['created_at','deleted_at'];
 
     public $timestamps = true;
