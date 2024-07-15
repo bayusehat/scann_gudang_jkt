@@ -64,15 +64,15 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="{{ url('/home') }}">
+                            <a class="nav-link @if(!empty($data['dashboard'])){{'active'}}@else{{''}}@endif" href="{{ url('/home') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
-                            <a class="nav-link" href="{{ url('/in') }}">
+                            <a class="nav-link @if(!empty($data['item_masuk'])){{'active'}}@else{{''}}@endif" href="{{ url('/in') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-sign-in"></i></div>
                                 Item Masuk
                             </a>
-                            <a class="nav-link" href="{{ url('/out') }}">
+                            <a class="nav-link @if(!empty($data['item_keluar'])){{'active'}}@else{{''}}@endif" href="{{ url('/out') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-sign-out"></i></div>
                                 Item Keluar
                             </a>
@@ -80,16 +80,16 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
                                 Item Master 
                             </a> --}}
-                            <a class="nav-link @if(!empty($data['active'])){{''}}@else{{'collapsed'}}@endif " href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="@if(!empty($data['active'])){{'true'}}@else{{'false'}}@endif" aria-controls="collapseLayouts">
+                            <a class="nav-link @if(!empty($data['menu_active'])){{''}}@else{{'collapsed'}}@endif " href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="@if(!empty($data['active'])){{'true'}}@else{{'false'}}@endif" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Recap Scan Order
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse @if(!empty($data['active'])){{'show'}}@else{{''}}@endif" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <div class="collapse @if(!empty($data['menu_active'])){{'show'}}@else{{''}}@endif" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{ url('/item') }}">Item Master</a>
-                                    <a class="nav-link" href="{{ url('/item/scan') }}">Item Scan</a>
-                                    <a class="nav-link" href="{{ url('/item/stok') }}">Laporan Stok SO</a>
+                                    <a class="nav-link @if(!empty($data['item'])){{'active'}}@else{{''}}@endif" href="{{ url('/item') }}">Item Master</a>
+                                    <a class="nav-link @if(!empty($data['item_scan'])){{'active'}}@else{{''}}@endif" href="{{ url('/item/scan') }}">Item Scan</a>
+                                    <a class="nav-link @if(!empty($data['item_stok'])){{'active'}}@else{{''}}@endif" href="{{ url('/item/stok') }}">Laporan Stok SO</a>
                                 </nav>
                             </div>
                             {{-- <div class="sb-sidenav-menu-heading">Interface</div>

@@ -12,8 +12,9 @@ class HomeController extends Controller
         $data = [
             'title' => 'Home',
             'content' => 'home',
-            'item_masuk' => In::count(),
-            'item_keluar' => Out::count()
+            'dashboard' => true,
+            'item_masuk_count' => In::count(),
+            'item_keluar_count' => Out::count()
         ];
 
         return view('layout.index',['data' => $data]);

@@ -12,7 +12,8 @@ class ActionController extends Controller
     public function indexIn(){
         $data = [
             'title' => 'Item Masuk',
-            'content' => 'in'
+            'content' => 'in',
+            'item_masuk' => true
         ];
         return view('layout.index',['data' => $data]);
     }
@@ -20,7 +21,8 @@ class ActionController extends Controller
     public function indexOut(){
         $data = [
             'title' => 'Item Keluar',
-            'content' => 'out'
+            'content' => 'out',
+            'item_keluar' => true
         ];
         return view('layout.index',['data' => $data]);
     }

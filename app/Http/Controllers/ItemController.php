@@ -19,7 +19,8 @@ class ItemController extends Controller
         $data = [
             'title' => 'Item Master',
             'content' => 'item',
-            'active' => true,
+            'menu_active' => true,
+            'item' => true,
             'warna' => ['BLACK','WHITE','COFFEE','TANE','BEIGE','DARK GREY','BLUE','RED','TOSCA','BLUE ORANGE'],
             'size' => ['39','40','41', '42','43','44','25']
         ];
@@ -151,7 +152,8 @@ class ItemController extends Controller
         $data = [
             'title' => 'Item Scan Page',
             'content' => 'item_sold',
-            'active' => true
+            'menu_active' => true,
+            'item_scan' => true
         ];
         
         return view('layout.index',['data' => $data]);
@@ -235,7 +237,8 @@ class ItemController extends Controller
         $data = [
             'title' => 'Laporan Stok SO',
             'content' => 'report_stok',
-            'active' => true
+            'menu_active' => true,
+            'item_stok' => true
         ];
 
         return view('layout.index',['data' => $data]);
