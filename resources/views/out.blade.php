@@ -59,17 +59,25 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title">Import Data Item Masuk</h5>
+                <h5 class="modal-title">Import Data Item Keluar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formImport" enctype="multipart/form-data">
-                     <div class="modal-body">
-                        <input type="file" name="file" id="file" class="form-control">
+                    <div class="modal-body">
+                        <div role="alert" id="notif">
+                            <span id="message"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="file" id="file" class="form-control">
+                        </div>
                     </div>
                 </form>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
-                <button type="button" class="btn btn-success" onclick="importData()">Import Data</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="btnCancel"><i class="fas fa-times"></i></button>
+                    <button type="button" class="btn btn-success" onclick="importData()" id="btnImport">Import Data</button> 
+                    <div class="spinner-border text-primary" role="status" id="spinLoad">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,7 +85,8 @@
 </main>
 <script>
     $(document).ready(function(){
-
+        $("#spinLoad").hide();
+        $("#notif").hide();
     })
 
     function importItem(){
@@ -101,12 +110,24 @@
             headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
+            beforeSend:function(){
+                $("#spinLoad").show();
+                $("#btnImport").hide();
+                $("#btnCancel").hide();
+            },
+            complete:function(){
+                $("#spinLoad").hide();
+            },
             success:function(e){
               if(e.status == 200){
-                $("#modalImport").modal('hide');
+                notif('alert alert-success',e.message);
                 $("#file").val('');
+                setTimeout(function(){
+                    $("#modalImport").modal('hide');
+                }, 3000);
                 table.ajax.reload(null,false);
               }else{
+                notif('alert alert-danger',e.message);
                 $("#file").val('');
               }
             }
@@ -162,6 +183,10 @@
                 }
             })
         }, 500);
+    }
 
+    function notif(type,message){
+        $("#notif").show().attr('class',type);
+        $("#message").text(message);
     }
 </script>

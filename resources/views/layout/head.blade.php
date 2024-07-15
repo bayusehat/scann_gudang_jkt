@@ -89,6 +89,7 @@
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{{ url('/item') }}">Item Master</a>
                                     <a class="nav-link" href="{{ url('/item/scan') }}">Item Scan</a>
+                                    <a class="nav-link" href="{{ url('/item/stok') }}">Laporan Stok SO</a>
                                 </nav>
                             </div>
                             {{-- <div class="sb-sidenav-menu-heading">Interface</div>

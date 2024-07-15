@@ -41,4 +41,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('item/delete/{id}/sold',[ItemController::class, 'destroyItemScan']);
     Route::post('item/import',[ItemController::class,'importItem']);
+    Route::get('item/stok',[ItemController::class, 'report_stok_view']);
+    Route::get('item/stok/list',[ItemController::class, 'reportStok']);
 });

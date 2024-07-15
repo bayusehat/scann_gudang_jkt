@@ -11,6 +11,7 @@ use DataTables;
 use App\Imports\ItemImport;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use DB;
 
 class ItemController extends Controller
 {
@@ -227,6 +228,107 @@ class ItemController extends Controller
                     'status' => 400,
                     'message' => 'Data gagal diimport! silahkan coba lagi'
                 ]);
+            }
+    }
+
+    public function report_stok_view(){
+        $data = [
+            'title' => 'Laporan Stok SO',
+            'content' => 'report_stok',
+            'active' => true
+        ];
+
+        return view('layout.index',['data' => $data]);
+    }
+
+    public function reportStok(Request $request){
+        $date_from = $request->input('date_from') ?? date('Y-m-d');
+        $date_to = $request->input('date_to') ?? date('Y-m-d');
+        if ($request->ajax()) {
+        $data = DB::select("
+        select *, (s_39+s_40+s_41+s_42+s_43+s_44+s_45) grand_total
+        from(
+            select artikel, warna, brand,
+                sum(case when size = 39 then sisa_stok else 0 end) s_39,
+                sum(case when size = 40 then sisa_stok else 0 end) s_40,
+                sum(case when size = 41 then sisa_stok else 0 end) s_41,
+                sum(case when size = 42 then sisa_stok else 0 end) s_42,
+                sum(case when size = 43 then sisa_stok else 0 end) s_43,
+                sum(case when size = 44 then sisa_stok else 0 end) s_44,
+                sum(case when size = 45 then sisa_stok else 0 end) s_45
+            from(
+                select d.*, (item_masuk - item_keluar) sisa_stok 
+                from(
+                select barcode, artikel, warna, size, gudang, brand, item_masuk, item_keluar
+                from items a 
+                    join (
+                    select a.kode_item, item_masuk, item_keluar
+                    from(
+                            select kode_item, count(kode_item) item_masuk from ins
+                                where date(created_at) between '".$date_from."' and '".$date_to."'
+                            group by kode_item
+                        ) a 
+                        join (
+                            select kode_item, count(kode_item) item_keluar from outs
+                                where date(created_at) between '".$date_from."' and '".$date_to."'
+                            group by kode_item
+                        ) b
+                    on a.kode_item = b.kode_item
+                    ) b on a.barcode = b.kode_item
+                ) d
+            ) e
+        group by artikel, warna, brand
+        ) f
+        ");
+
+        return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('artikel', function($row){
+                    return $row->artikel;
+                })
+                ->addColumn('warna', function($row){
+                    return $row->warna;
+                })
+                ->addColumn('brand', function($row){
+                    return $row->brand;
+                })
+                ->addColumn('s_39', function($row){
+                    return $row->s_39;
+                })
+                ->addColumn('s_40', function($row){
+                    return $row->s_40;
+                })
+                ->addColumn('s_41', function($row){
+                    return $row->s_41;
+                })
+                ->addColumn('s_42', function($row){
+                    return $row->s_42;
+                })
+                ->addColumn('s_43', function($row){
+                    return $row->s_43;
+                })
+                ->addColumn('s_44', function($row){
+                    return $row->s_44;
+                })
+                ->addColumn('s_45', function($row){
+                    return $row->s_45;
+                })
+                ->addColumn('grand_total', function($row){
+                    return $row->grand_total;
+                })
+                // ->addColumn('harga', function($row){
+                //     return 'Rp '.number_format($row->item->harga);
+                // })
+                // ->addColumn('created_at', function($row){
+                //     return date('d-m-Y H:i',strtotime($row->created_at));
+                // })
+                // ->addColumn('action',function($row){
+                //     return '<div class="btn-group" role="group" aria-label="Basic example">
+                //             <a href="javascript:void(0)" onclick="deleteItemSold('.$row->id_item_sold.')" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                //         </div>';
+                // })
+                // ->rawColumns(['action'])
+                ->make(true);
             }
     }
 

@@ -120,13 +120,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formImport" enctype="multipart/form-data">
-                     <div class="modal-body">
-                        <input type="file" name="file" id="file" class="form-control">
+                    <div class="modal-body">
+                        <div role="alert" id="notif">
+                            <span id="message"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="file" id="file" class="form-control">
+                        </div>
                     </div>
                 </form>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
-                <button type="button" class="btn btn-success" onclick="importData()">Import Data</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="btnCancel"><i class="fas fa-times"></i></button>
+                    <button type="button" class="btn btn-success" onclick="importData()" id="btnImport">Import Data</button> 
+                    <div class="spinner-border text-primary" role="status" id="spinLoad">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -136,6 +144,8 @@
     $(document).ready(function(){
         $("#btnupdate").hide();
         $("#btncancel").hide();
+        $("#spinLoad").hide();
+        $("#notif").hide();
     })
 
     function whenEdit(){
@@ -178,12 +188,24 @@
             headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
+            beforeSend:function(){
+                $("#spinLoad").show();
+                $("#btnImport").hide();
+                $("#btnCancel").hide();
+            },
+            complete:function(){
+                $("#spinLoad").hide();
+            },
             success:function(e){
               if(e.status == 200){
-                $("#modalImport").modal('hide');
+                notif('alert alert-success',e.message);
                 $("#file").val('');
+                setTimeout(function(){
+                    $("#modalImport").modal('hide');
+                }, 3000);
                 table.ajax.reload(null,false);
               }else{
+                notif('alert alert-danger',e.message);
                 $("#file").val('');
               }
             }
@@ -320,59 +342,8 @@
             order: [[0, 'desc']],
         });
 
-        // $("#kode_item").one('keyup',function(){
-        //     var kode = $("#kode_item").val();
-        //     $.ajax({
-        //         method : 'POST',
-        //         url : '{{ url("/autoadd") }}/',
-        //         data : {
-        //             'kode_item' : kode
-        //         },
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         success:function(e){
-        //             if(e.status == 'success'){
-        //                 $('#kode_item').val('').focus();
-        //                 table.ajax.reload(null,false);
-        //             }else{
-        //                 alert(e.messge);
-        //                 $('#kode_item').val('').focus();
-        //             }
-        //         }
-        //     })
-        // })
-    // let timer = null;
-    // function auto_add(e){
-    //     var kode = $("#kode_item").val();
-    //     e.preventDefault();
-    //     if(timer){
-    //         window.clearTimeout(timer);
-    //         timer = null;
-    //     }
-
-    //     timer = window.setTimeout( ()=>{
-    //         $.ajax({
-    //             method : 'POST',
-    //             url : '{{ url("/autoadd") }}/',
-    //             data : {
-    //                 'kode_item' : kode,
-    //                 'part' : 'in'
-    //             },
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //             },
-    //             success:function(e){
-    //                 if(e.status == 'success'){
-    //                     $('#kode_item').val('').focus();
-    //                     table.ajax.reload(null,false);
-    //                 }else{
-    //                     alert(e.message);
-    //                     $('#kode_item').val('').focus();
-    //                 }
-    //             }
-    //         })
-    //     }, 500);
-
-    // }
+    function notif(type,message){
+        $("#notif").show().attr('class',type);
+        $("#message").text(message);
+    }
 </script>
