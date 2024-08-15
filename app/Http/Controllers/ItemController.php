@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\ItemSold;
+use App\Models\ItemDocument;
 use Validator;
 use Str;
 use DataTables;
@@ -12,6 +13,7 @@ use App\Imports\ItemImport;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use DB;
+use App\Models\Warehouse;
 
 class ItemController extends Controller
 {
@@ -22,7 +24,8 @@ class ItemController extends Controller
             'menu_active' => true,
             'item' => true,
             'warna' => ['BLACK','WHITE','COFFEE','TANE','BEIGE','DARK GREY','BLUE','RED','TOSCA','BLUE ORANGE'],
-            'size' => ['39','40','41', '42','43','44','25']
+            'size' => ['39','40','41', '42','43','44','45'],
+            'lbrand' => DB::select("SELECT DISTINCT brand FROM items WHERE brand <> '' OR brand = NULL")
         ];
 
         return view('layout.index',['data' => $data]);
@@ -60,6 +63,7 @@ class ItemController extends Controller
             'artikel' => 'required',
             'warna' => 'required',
             'size' => 'required',
+            'brand' => 'required'
         ];
 
         $isValid = Validator::make($request->all(),$rules);
@@ -73,6 +77,7 @@ class ItemController extends Controller
             $i->warna = $request->input('warna');
             $i->size = $request->input('size');
             $i->harga = $request->input('harga');
+            $i->brand = $request->input('brand');
             if($i->save()){
                 return response(['status' => 200, 'message' => 'Item created successfully']);
             }else{
@@ -82,7 +87,7 @@ class ItemController extends Controller
     }
 
     public function edit($id_item){
-        $check = Item::find($id_item);
+        $check = Item::leftJoin('brands','items.barcode','=','brands.barcode')->find($id_item);
         if($check){
             return response(['status' => 200, 'data' => $check]);
         }
@@ -238,7 +243,8 @@ class ItemController extends Controller
             'title' => 'Laporan Stok SO',
             'content' => 'report_stok',
             'menu_active' => true,
-            'item_stok' => true
+            'item_stok' => true,
+            'gudang_list' => Warehouse::all()
         ];
 
         return view('layout.index',['data' => $data]);
@@ -247,6 +253,7 @@ class ItemController extends Controller
     public function reportStok(Request $request){
         $date_from = $request->input('date_from') ?? date('Y-m-d');
         $date_to = $request->input('date_to') ?? date('Y-m-d');
+        $id_warehouse = $request->input('id_warehouse') ?? 0;
         if ($request->ajax()) {
         $data = DB::select("
         select *, (s_39+s_40+s_41+s_42+s_43+s_44+s_45) grand_total
@@ -262,18 +269,20 @@ class ItemController extends Controller
             from(
                 select d.*, (item_masuk - item_keluar) sisa_stok 
                 from(
-                select barcode, artikel, warna, size, gudang, brand, item_masuk, item_keluar
+                select barcode, artikel, warna, size, gudang, brand, coalesce(item_masuk,0) item_masuk, coalesce(item_keluar,0) item_keluar
                 from items a 
-                    join (
+                    left join (
                     select a.kode_item, item_masuk, item_keluar
                     from(
                             select kode_item, count(kode_item) item_masuk from ins
-                                where date(created_at) between '".$date_from."' and '".$date_to."'
+                                left join item_documents b on ins.id_document = b.id_document
+                                where b.document_date between '".$date_from."' and '".$date_to."' and b.deleted_at is null and b.document_type = 'IM' and b.id_warehouse = ".$id_warehouse."
                             group by kode_item
                         ) a 
-                        join (
+                        left join (
                             select kode_item, count(kode_item) item_keluar from outs
-                                where date(created_at) between '".$date_from."' and '".$date_to."'
+                                left join item_documents b on outs.id_document = b.id_document
+                                where b.document_date between '".$date_from."' and '".$date_to."' and b.deleted_at is null and b.document_type = 'IK' and b.id_warehouse = ".$id_warehouse."
                             group by kode_item
                         ) b
                     on a.kode_item = b.kode_item
@@ -333,6 +342,26 @@ class ItemController extends Controller
                 // ->rawColumns(['action'])
                 ->make(true);
             }
+    }
+
+    //Item Document
+    public function generateNumber($type){
+        $datenow = date('Y-m');
+        $getItem = ItemDocument::where('document_date','LIKE',"$datenow%")->latest()->first();
+
+        if(empty($getItem->counter)){
+            $counterVal = 1;
+        }else{
+            $counterVal = $getItem->counter + 1;
+        }
+
+        // $document_number = $type.date('ym').sprintf("%04s",$counterVal);
+
+        // return response([
+        //     'docnum' => $document_number,
+        //     'counter' => $counterVal,
+        //     'type' => $type
+        // ]);
     }
 
 }

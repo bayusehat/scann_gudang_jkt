@@ -10,13 +10,21 @@
             <li class="breadcrumb-item active">Laporan Stok SO</li>
         </ol>
         <div class="row">
-            <div class="col-12 col-md-5">
+            <div class="col-12 col-md-3">
                 <input type="date" name="date_from" id="date_from" class="form-control">
             </div>
-            <div class="col-12 col-md-5">
+            <div class="col-12 col-md-3">
                 <input type="date" name="date_to" id="date_to" class="form-control">
             </div>
-            <div class="col-12 col-md-2">
+            <div class="col-12 col-md-3">
+                <select name="id_warehouse" id="id_warehouse" class="form-control">
+                    <option value="">-- Pilih Gudang --</option>
+                    @foreach ($gudang_list as $gl)
+                        <option value="{{ $gl->id_warehouse }}">{{ $gl->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-12 col-md-3">
                 <button type="button" name="btnFilter" id="btnFilter" class="btn btn-success" onclick="loadTable()"><i class="fa fa-search"></i> Cari</button>
             </div>
             <span class="text-danger">*apabila filter tidak digunakan maka data yang ditampilkan adalah data perhari ini</span>
@@ -142,7 +150,8 @@
                 url: '{{ url("item/stok/list") }}',
                 data: {
                     'date_from' : $("#date_from").val(),
-                    'date_to' : $("#date_to").val()
+                    'date_to' : $("#date_to").val(),
+                    'id_warehouse' : $("#id_warehouse").val()
                 }
             },
             columns: [

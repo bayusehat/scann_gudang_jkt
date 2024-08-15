@@ -1,21 +1,65 @@
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Item Masuk</h1>
+        <h1 class="mt-4">Tambah Item Masuk</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Item Masuk</li>
+            <li class="breadcrumb-item active">Tambah Item Masuk</li>
         </ol>
         <div class="row">
             <div class="col-xl-12">
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
-                        Scan / Input Item
+                        Dokumen Detail
                     </div>
-                    <div class="form-group">
-                        <input type="text" name="kode_item" id="kode_item" class="form-control" placeholder="Scan or write item code here ..." onkeyup="auto_add(event)" autofocus>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Nomor Dokumen</label>
+                                    <input type="text" class="form-control-plaintext" name="document_number" id="document_number" value="{{$data->document_number}}">
+                                    <input type="hidden" name="counter" id="counter" value="{{$data->counter}}">
+                                    <input type="hidden" name="id" id="id" value="{{$data->id_document}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Tipe</label>
+                                    <input type="text" class="form-control-plaintext" name="document_type" id="document_type" value="{{$data->document_type}}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Scan Input</label>
+                                    <div class="form-group">
+                                        <input type="text" name="kode_item" id="kode_item" class="form-control" placeholder="Scan or write item code here ..." onkeyup="auto_add(event)" autofocus>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Gudang</label>
+                                    <div class="form-group">
+                                        <select name="gudang" id="gudang" class="form-control">
+                                            <option value="">-- Pilih Gudang --</option>
+                                            @foreach ($gudang_list as $gl)
+                                                <option value="{{ $gl->id_warehouse }}" @if ($data->id_warehouse == $gl->id_warehouse)
+                                                    {{'selected'}}
+                                                @else
+                                                    {{''}}
+                                                @endif>{{ $gl->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer">
-                        <button type="button" class="btn btn-default b-block" name="btnimport" id="btnimport" onclick="importItem()"><i class="fas fa-file"></i> Import Data From Excel</button>
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-primary b-block" name="btnimport" id="btnimport" onclick="importItem()"><i class="fas fa-file"></i> Import Data From Excel</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-danger float-end" name="btnCancel" id="btnCancel" onclick="deleteCreate()"><i class="fas fa-times"></i> Batal / Hapus Dokumen</button>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -87,7 +131,30 @@
     $(document).ready(function(){
         $("#spinLoad").hide();
         $("#notif").hide();
+        // generateNumber();
+        $("#gudang").select2();
+        $("#gudang").on('change',function(){
+            var id = "{{ $data->id_document }}";
+            var id_warehouse = $(this).val();
+            console.log(id_warehouse);
+
+            $.ajax({
+            url : '{{ url("warehouse/in") }}/'+id+'/'+id_warehouse,
+            method : 'GET',
+            success:function(res){
+                if(res.status == 200){
+                    alert(res.message);
+                }else{
+                    alert(res.message);
+                }
+            }
+        })
+        })
     })
+
+    function editGudang(id, id_warehouse){
+    
+    }
 
     function importItem(){
         $("#modalImport").modal('show');
@@ -96,6 +163,53 @@
     function hideImport(){
         $("#modalImport").modal('hide');
         $("#file").val('');
+    }
+
+    function insertDocument(){
+        $.ajax({
+            url : "{{ url('document/insert') }}",
+            method : "POST",
+            dataType : "JSON",
+            data : {
+                "document_number" : $("#document_number").val(),
+                "document_type" : $("#document_type").val(),
+                "counter" : $("#counter").val(),
+                "id_document" : $("#id").val()
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success:function(res){
+                $("#id").val(res.data.id_document);
+            }
+        })
+    }
+
+    function generateNumber(){
+        let tipe = $("#document_type").val();
+        $.ajax({
+            url : "{{ url('item/generate') }}/"+tipe,
+            method : 'GET',
+            success:function(res){
+                $("#document_number").val(res.docnum);
+                $("#counter").val(res.counter);
+            }
+        })
+    }
+
+    function deleteCreate(){
+        let id = $("#id").val();
+        $.ajax({
+            url : "{{ url('/in/create/delete') }}/"+id,
+            method : 'GET',
+            success:function(res){
+              if(res.status == 200){
+                window.location = '{{ url("/in") }}';
+              }else{
+                alert(res.message);
+              }              
+            }
+        })
     }
 
     function importData(){
@@ -140,7 +254,10 @@
             destroy: true,
             paging: true,
             ajax: {
-                url: '{{ url("in/load") }}'
+                url: '{{ url("in/load/detail") }}',
+                data : function(d){
+                    d.id_document = $("#id").val()
+                }
             },
             columns: [
                 { name: 'DT_RowIndex', data: 'DT_RowIndex', orderable: false, searchable: false },
@@ -167,7 +284,8 @@
                 url : '{{ url("/autoadd") }}/',
                 data : {
                     'kode_item' : kode,
-                    'part' : 'in'
+                    'part' : 'in',
+                    'id_document' : $("#id").val()
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

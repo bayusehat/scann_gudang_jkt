@@ -5,83 +5,48 @@
 </style>
 <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4">Item Master</h1>
+        <h1 class="mt-4">Gudang Master</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Item Master</li>
+            <li class="breadcrumb-item active">Gudang Master</li>
         </ol>
         <div class="row">
             <div class="col-xl-12">
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
-                        <span id="titlefunction">Insert new Item</span>
+                        <span id="titlefunction">Insert new Gudang</span>
                     </div>
                     <div class="card-body">
-                        <form class="form-inline">
+                        <form>
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Code Item / Barcode</label>
-                                        <input type="text" class="form-control" name="barcode" id="barcode" placeholder="Barcode Item">
-                                        <span class="text-danger vld" id="valid_barcode"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Artikel</label>
-                                        <input type="text" class="form-control" name="artikel" id="artikel" placeholder="Artikel Name">
-                                        <span class="text-danger vld" id="valid_artikel"></span>
+                                <div class="col-md-3">
+                                    <div class="form-group mb-2">
+                                        <label for="name">Nama Gudang<span class="text-danger">*</span></label>
+                                        <input type="text" name="name" id="name" class="form-control" placeholder="Isi nama gudang ...">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Warna</label>
-                                        <select name="warna" id="warna" class="form-control">
-                                            <option value="">Pilih Warna</option>
-                                            @foreach ($warna as $w)
-                                                <option value="{{$w}}">{{$w}}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="text-danger vld" id="valid_warna"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Size</label>
-                                        <select name="size" id="size" class="form-control">
-                                            <option value="">Pilih Size</option>
-                                            @foreach ($size as $s)
-                                                <option value="{{$s}}">{{$s}}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="text-danger vld" id="valid_size"></span>
+                                <div class="col-md-3">
+                                    <div class="form-group mx-sm-3 mb-2">
+                                        <label for="name">Kode Gudang<span class="text-danger">*</span></label>
+                                        <input type="text" name="code" id="code" class="form-control" placeholder="Isis kode gudang ...">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
-                                        <label>Harga</label>
-                                        <input type="text" class="form-control" name="harga" id="harga" placeholder="Harga">
-                                        <span class="text-danger vld" id="valid_harga"></span>
+                                        <label for="name">Alamat Gudang<span class="text-danger">*</span></label>
+                                        <input type="text" name="address" id="address" class="form-control" placeholder="isi alamat gudang ...">
                                     </div>
-                                    <div class="form-group">
-                                        <label>Brand</label>
-                                        <select name="brand" id="brand" class="form-control">
-                                            <option value="">-- Pilih Brand --</option>
-                                            @foreach ($lbrand as $br)
-                                                <option value="{{ $br->brand }}">{{ $br->brand }}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="text-danger vld" id="valid_brand"></span>
-                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <br>
-                                    <button type="button" class="btn btn-default b-block" name="btnimport" id="btnimport" onclick="importItem()"><i class="fas fa-file"></i> Import Data From Excel</button>
-                                    <button type="button" class="btn btn-primary b-block" name="btncreate" id="btncreate" onclick="createItem()"><i class="fas fa-save"></i> Create</button>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <button type="button" class="btn btn-success b-block" name="btnuodate" id="btnupdate" onclick="updateItem()"><i class="fas fa-edit"></i> Update</button>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button type="button" class="btn btn-danger b-block" name="btncancel" id="btncancel" onclick="whenCancel()"><i class="fas fa-times"></i> Cancel</button>
-                                        </div>
+                                    <button type="button" class="btn btn-success" id="btncreate" onclick="createWarehouse()"><i class="fa fa-save"></i> Simpan</button>
+                                    <div id="btnGroupEdit">
+                                        <button type="button" class="btn btn-primary" id="btnupdate" onclick="updateWarehouse"><i class="fa fa-edit"></i> Update</button>
+                                        <button type="button" class="btn btn-danger" id="btncancel" onclick="whenCancel()"><i class="fa fa-times"></i> Cancel</button>
                                     </div>
                                 </div>
                             </div>
+                            
                         </form>
                     </div>
                 </div>
@@ -97,24 +62,18 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Barcode</th>
-                            <th>Artikel</th>
-                            <th>Warna</th>
-                            <th>Size</th>
-                            <th>Harga</th>
-                            <th>Brand</th>
+                            <th>Nama Gudang</th>
+                            <th>Kode</th>
+                            <th>Alamat</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>No</th>
-                            <th>Barcode</th>
-                            <th>Artikel</th>
-                            <th>Warna</th>
-                            <th>Size</th>
-                            <th>Harga</th>
-                            <th>Brand</th>
+                            <th>Nama Gudang</th>
+                            <th>Kode</th>
+                            <th>Alamat</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -164,20 +123,17 @@
         $("#btncreate").hide();
         $("#btnupdate").show();
         $("#btncancel").show();
-        $("#barcode").focus();
+        $("#name").focus();
     }
 
     function whenCancel(){
         $("#btncreate").show();
         $("#btnupdate").hide();
         $("#btncancel").hide();
-        $("#barcode").val(""),
-        $("#artikel").val(""),
-        $("#warna").val(""),
-        $("#size").val(""),
-        $("#harga").val("");
-        $("#brand").val("");
-        $("#titlefunction").text("Insert new Item");
+        $("#name").val("")
+        $("#code").val("")
+        $("#address").val("")
+        $("#titlefunction").text("Insert new Gudang");
     }
 
     function importItem(){
@@ -225,30 +181,24 @@
         })
     }
 
-    function createItem(){
+    function createWarehouse(){
         $.ajax({
-            url : "{{ url('item/insert') }}",
+            url : "{{ url('warehouse/insert') }}",
             method : "POST",
             dataType : "JSON",
             data : {
-                'barcode' : $("#barcode").val(),
-                'artikel' : $("#artikel").val(),
-                'warna' : $("#warna").val(),
-                'size' : $("#size").val(),
-                'harga' : $("#harga").val(),
-                'brand' : $("#brand").val()
+                'name' : $("#name").val(),
+                'code' : $("#code").val(),
+                'address' : $("#address").val(),
             },
             headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success:function(e){
                 if(e.status == 200){
-                    $("#barcode").val("").focus()
-                    $("#artikel").val("")
-                    $("#warna").val("")
-                    $("#size").val("")
-                    $("#harga").val("")
-                    $("#brand").val("")
+                    $("#name").val("").focus()
+                    $("#code").val("")
+                    $("#address").val("")
                     $(".vld").text("");
                     table.ajax.reload(null,false);
                 }else if(e.status == 400){
@@ -263,22 +213,19 @@
         })
     }
 
-    function editItem(id){
+    function editWarehouse(id){
         whenEdit();
         $.ajax({
-            url : "{{ url('item/edit') }}/"+id,
+            url : "{{ url('warehouse/edit') }}/"+id,
             method : "GET",
             dataType : "JSON",
             success:function(e){
                 if(e.status == 200){
-                    $("#titlefunction").text("Edit Item "+e.data.artikel);
-                    $("#barcode").val(e.data.barcode)
-                    $("#artikel").val(e.data.artikel)
-                    $("#warna").val(e.data.warna).trigger('change')
-                    $("#size").val(e.data.size).trigger('change')
-                    $("#harga").val(e.data.harga)
-                    $("#brand").val(e.data.brand).trigger('change')
-                    $("#btnupdate").attr('onclick',`updateItem(${e.data.id_item})`);
+                    $("#titlefunction").text("Edit Item "+e.data.name);
+                    $("#name").val(e.data.name)
+                    $("#code").val(e.data.code)
+                    $("#address").val(e.data.address)
+                    $("#btnupdate").attr('onclick',`updateWarehouse(${e.data.id_warehouse})`);
                 }else{
                     alert(e.message);
                 }
@@ -286,29 +233,24 @@
         })
     }
 
-    function updateItem(id){
+    function updateWarehouse(id){
         $.ajax({
-            url : "{{ url('item/update') }}/"+id,
+            url : "{{ url('warehouse/update') }}/"+id,
             method : "POST",
             dataType : "JSON",
             data : {
-                'barcode' : $("#barcode").val(),
-                'artikel' : $("#artikel").val(),
-                'warna' : $("#warna").val(),
-                'size' : $("#size").val(),
-                'harga' : $("#harga").val()
+                'name' : $("#name").val(),
+                'code' : $("#code").val(),
+                'address' : $("#address").val(),
             },
             headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success:function(e){
                 if(e.status == 200){
-                    $("#barcode").val(""),
-                    $("#artikel").val(""),
-                    $("#warna").val(""),
-                    $("#size").val(""),
-                    $("#harga").val("")
-                    $("#brand").val("")
+                    $("#name").val("").focus()
+                    $("#code").val("")
+                    $("#address").val("")
                     whenCancel();
                     table.ajax.reload(null,false);
                 }else if(e.status == 400){
@@ -323,9 +265,9 @@
         })
     }
 
-    function deleteItem(id){
+    function deleteWarehouse(id){
         $.ajax({
-            url : "{{ url('item/delete') }}/"+id,
+            url : "{{ url('warehouse/delete') }}/"+id,
             method : "GET",
             dataType: "JSON",
             success:function(e){
@@ -344,16 +286,13 @@
             destroy: true,
             paging: true,
             ajax: {
-                url: '{{ url("item/load") }}'
+                url: '{{ url("warehouse/load") }}'
             },
             columns: [
                 { name: 'DT_RowIndex', data: 'DT_RowIndex', orderable: false, searchable: false },
-                { name: 'barcode', data: 'barcode'},
-                { name: 'artikel', data: 'artikel'},
-                { name: 'warna', data: 'warna'},
-                { name: 'size', data: 'size'},
-                { name: 'harga', data: 'harga'},
-                { name: 'brand', data: 'brand'},
+                { name: 'name', data: 'name'},
+                { name: 'code', data: 'code'},
+                { name: 'address', data: 'address'},
                 { name: 'action', data: 'action'},
             ],
             lengthMenu: [10,50,-1],

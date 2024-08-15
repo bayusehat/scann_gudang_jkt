@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ActionController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\WarehouseController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,4 +44,23 @@ Route::middleware(['auth'])->group(function () {
     Route::post('item/import',[ItemController::class,'importItem']);
     Route::get('item/stok',[ItemController::class, 'report_stok_view']);
     Route::get('item/stok/list',[ItemController::class, 'reportStok']);
+
+    Route::get('item/generate/{type}',[ActionController::class, 'generateNumber']);
+    Route::get('/in/create/{type}',[ActionController::class,'insertDocument']);
+    Route::get('/in/document/{id}',[ActionController::class,'createIn']);
+    Route::get('/out/document/{id}',[ActionController::class,'createOut']);
+    // Route::post('/document/insert',[ActionController::class,'insertDocument']);
+    Route::get('/in/create/delete/{id}',[ActionController::class,'deleteDocument']);
+    Route::get('/in/load/detail',[ActionController::class,'loadInDetail']);
+    Route::get('/out/load/detail',[ActionController::class,'loadOutDetail']);
+    Route::get('test/generate/{type}',[ItemController::class, 'generateNumber']);
+
+    //Warehouse
+    Route::get('/warehouse',[WarehouseController::class, 'index']);
+    Route::get('/warehouse/load',[WarehouseController::class, 'warehouseLoad']);
+    Route::post('/warehouse/insert',[WarehouseController::class, 'insert']);
+    Route::get('/warehouse/edit/{id}',[WarehouseController::class, 'edit']);
+    Route::post('/warehouse/update/{id}',[WarehouseController::class, 'update']);
+    Route::get('/warehouse/delete/{id}',[WarehouseController::class, 'destroy']);
+    Route::get('/warehouse/{tipe}/{id}/{id_warehouse}',[WarehouseController::class, 'warehouseDocEdit']);
 });

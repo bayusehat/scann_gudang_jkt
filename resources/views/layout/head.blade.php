@@ -31,6 +31,8 @@
         <script src="{{ asset('js/vfs_fonts.js')}}"></script>
         <script src="{{ asset('js/buttons.html5.min.js')}}"></script>
         <script src="{{ asset('js/buttons.print.min.js')}}"></script>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -88,8 +90,9 @@
                             <div class="collapse @if(!empty($data['menu_active'])){{'show'}}@else{{''}}@endif" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link @if(!empty($data['item'])){{'active'}}@else{{''}}@endif" href="{{ url('/item') }}">Item Master</a>
+                                    <a class="nav-link @if(!empty($data['warehouse_menu'])){{'active'}}@else{{''}}@endif" href="{{ url('/warehouse') }}"> Gudang Master</a>
                                     <a class="nav-link @if(!empty($data['item_scan'])){{'active'}}@else{{''}}@endif" href="{{ url('/item/scan') }}">Item Scan</a>
-                                    <a class="nav-link @if(!empty($data['item_stok'])){{'active'}}@else{{''}}@endif" href="{{ url('/item/stok') }}">Laporan Stok SO</a>
+                                    <a class="nav-link @if(!empty($data['item_stok'])){{'active'}}@else{{''}}@endif" href="{{ url('/item/stok') }}">Sisa Stok</a>
                                 </nav>
                             </div>
                             {{-- <div class="sb-sidenav-menu-heading">Interface</div>
