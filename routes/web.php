@@ -63,4 +63,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/warehouse/update/{id}',[WarehouseController::class, 'update']);
     Route::get('/warehouse/delete/{id}',[WarehouseController::class, 'destroy']);
     Route::get('/warehouse/{tipe}/{id}/{id_warehouse}',[WarehouseController::class, 'warehouseDocEdit']);
+
+    Route::get('/print/stok',[ItemController::class, 'printStok']);
+    Route::get('/print/in/{id}',[ItemController::class, 'printIn']);
+    Route::get('/print/out/{id}',[ItemController::class, 'printOut']);
 });

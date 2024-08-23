@@ -5,6 +5,12 @@
             <li class="breadcrumb-item active">Tambah Item Masuk</li>
         </ol>
         <div class="row">
+            <div class="col-md-12 col-12 col-sm-12">
+                <a href="{{ url('print/in/'.$data->id_document) }}" target="__blank" class="btn btn-success"><i class="fa fa-print"></i> Print</a>
+            </div>
+        </div>
+        <br>
+        <div class="row">
             <div class="col-xl-12">
                 <div class="card mb-4">
                     <div class="card-header">

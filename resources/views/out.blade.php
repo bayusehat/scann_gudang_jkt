@@ -5,6 +5,12 @@
             <li class="breadcrumb-item active">Item Keluar</li>
         </ol>
         <div class="row">
+            <div class="col-md-12 col-12 col-sm-12">
+                <a href="{{ url('print/out/'.$data->id_document) }}" target="__blank" class="btn btn-success"><i class="fa fa-print"></i> Print</a>
+            </div>
+        </div>
+        <br>
+        <div class="row">
             <div class="col-xl-12">
                 <div class="card mb-4">
                     <div class="card-header">
@@ -266,7 +272,8 @@
                 url : '{{ url("/autoadd") }}/',
                 data : {
                     'kode_item' : kode,
-                    'part' : 'out'
+                    'part' : 'out',
+                    'id_document' : $("#id").val()
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

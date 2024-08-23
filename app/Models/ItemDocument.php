@@ -30,4 +30,9 @@ class ItemDocument extends Model
     public function item_out(){
         return $this->hasMany(Out::class, 'id_document','id_document');
     }
+
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'id_warehouse', 'id_warehouse');
+    }
 }

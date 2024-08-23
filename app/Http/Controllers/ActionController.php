@@ -49,7 +49,8 @@ class ActionController extends Controller
                     return $status;
                 })
                 ->addColumn('action', function($row){
-                    return '<a href="'.url("in/document/".$row->id_document).'" class="btn btn-primary btn-sm"> Edit / Detail</a>';
+                    return '<a href="'.url("in/document/".$row->id_document).'" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit / Detail</a>
+                    <a href="'.url("print/in/".$row->id_document).'" target="__blank" class="btn btn-success btn-sm"><i class="fa fa-print"></i> Print</a>';
                 })
                 ->rawColumns(['action','status'])
                 ->make(true);
@@ -175,7 +176,8 @@ class ActionController extends Controller
                     return $status;
                 })
                 ->addColumn('action', function($row){
-                    return '<a href="'.url("out/document/".$row->id_document).'" class="btn btn-primary btn-sm"> Edit / Detail</a>';
+                    return '<a href="'.url("out/document/".$row->id_document).'" class="btn btn-primary btn-sm"> Edit / Detail</a>
+                     <a href="'.url("print/out/".$row->id_document).'" target="__blank" class="btn btn-success btn-sm"><i class="fa fa-print"></i> Print</a>';
                 })
                 ->rawColumns(['action','status'])
                 ->make(true);
